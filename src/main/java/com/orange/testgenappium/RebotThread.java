@@ -22,8 +22,7 @@ package com.orange.testgenappium;
  
 import static com.orange.testgenappium.Tools.getFileExtension;
 import static com.orange.testgenappium.launcher.IMG_PATH;
-import static com.orange.testgenappium.launcher.OUTPUT_PATH;
-import static com.orange.testgenappium.launcher.RUNNER_PATH;
+import static com.orange.testgenappium.launcher.OUTPUT_PATH; 
 import static com.orange.testgenappium.launcher.WORKING_PATH;
 import java.io.BufferedReader;
 import java.io.File;
@@ -88,7 +87,7 @@ public class RebotThread implements Runnable {
                 
                 // set the report name with test name from launcher config
                 rebotArgs.add("--name");
-                rebotArgs.add(device.getType()+ " - " + device.getName() + " - " + device.getOs());
+                rebotArgs.add(device.getName());
 
                 rebotArgs.add("-o");
                 rebotArgs.add("output." + device.getUdid()+ ".xml");
