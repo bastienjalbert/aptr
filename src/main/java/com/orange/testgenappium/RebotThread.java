@@ -217,9 +217,7 @@ public class RebotThread implements Runnable {
                 File folder = new File(IMG_PATH);
                 File[] listOfFiles = folder.listFiles();
 
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    System.out.println("FILEEEEEE : " + listOfFiles[i]);
-                    System.out.println("FILEEEEEE NAME : " + listOfFiles[i].getName());
+                for (int i = 0; i < listOfFiles.length; i++) { 
                     // we verify that the file is an image (.png)
                     if (listOfFiles[i].isFile() 
                             && getFileExtension(listOfFiles[i]).equals("png")) { 
