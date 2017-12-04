@@ -23,8 +23,7 @@ package com.orange.testgenappium;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import me.tongfei.progressbar.ProgressBar;
+import java.util.Date; 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -142,12 +141,7 @@ public class launcher {
         /**
          * start tests
          */
-        try {
-            // prepare to indicate the progression of execution
-            ProgressBar pb = new ProgressBar("Running test", tests_suites.size());  
-            pb.start();
-            pb.setExtraMessage("Please wait while APTR is running test");
-            
+        try { 
             // executing all test
             for (String oneTestFile : tests_suites) { 
                  
@@ -161,9 +155,7 @@ public class launcher {
                 // when the test is terminated
                 // copying and renamming each outputx.xml files 
                 Tools.preparingOutputsToTmp(devices_conf, Tools.getOnlyTestNameFromFile(oneTestFile));
-                
-                // update progression
-                pb.step();
+                 
             } 
             
             /* Creating final output.xml and report/log html files by aggregating *
@@ -218,14 +210,14 @@ public class launcher {
         final Option jenkins = Option.builder("j")
                 .longOpt("jenkins")
                 .desc("If you're running test with jenkins specify it. Reporting behaviour are not the sames.")
-                .hasArg(true)
-                .required(false)
+                .hasArg(false)
+                .required(false) 
                 .build();
         
         final Option verbose = Option.builder("v")
                 .longOpt("verbose")
                 .desc("Show processes output and more information, be verbose.")
-                .hasArg(true)
+                .hasArg(false)
                 .required(false)
                 .build();
 

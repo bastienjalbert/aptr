@@ -230,6 +230,22 @@ public class RebotThread implements Runnable {
                 System.out.println("Log:     " + new File(FINAL_OUTPUT).getAbsolutePath() + "/log.html");
                 System.out.println("Report:  " + new File(FINAL_OUTPUT).getAbsolutePath() + "/report.html");
                 
+            } else { // we just have to copy screenshots to working dir if we
+                     // ran test on jenkins
+                
+                // copy all screenshots to the final directory
+                // open the directory and get files into
+                File folder = new File(IMG_PATH);
+                File[] listOfFiles = folder.listFiles();
+
+                for (int i = 0; i < listOfFiles.length; i++) { 
+                    // we verify that the file is an image (.png)
+                    if (listOfFiles[i].isFile() 
+                            && getFileExtension(listOfFiles[i]).equals("png")) { 
+                        // moving the image
+                        listOfFiles[i].renameTo(new File(WORKING_PATH + "/" + listOfFiles[i].getName())); 
+                    } 
+                }
             }
   
 
