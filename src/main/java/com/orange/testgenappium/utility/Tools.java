@@ -18,8 +18,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.orange.testgenappium;
+package com.orange.testgenappium.utility;
 
+import com.orange.testgenappium.model.Device;
+import com.orange.testgenappium.launcher;
 import static com.orange.testgenappium.launcher.*;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList; 
 import java.util.Arrays;
@@ -35,6 +38,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger; 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 /**
  * Utility class that contains some usefull functions to create automatically 
@@ -43,6 +48,69 @@ import org.apache.commons.io.FileUtils;
  */
 public class Tools {
      
+    private static final String CUSTOM_PABOT_REPO_URI = "https://github.com/bastienjalbert/pabot";
+     
+    /**
+     * Update custom pabot version (for screenshots copy) by cloning git repo
+     * into pabot directory.
+     * 
+     * 
+     * 
+     * @param forced if true we delete pabot folder if it already exists and clone fresh repo
+     */
+    public static void updateCustomPabot(boolean forced) {
+        
+        System.err.println("Upgrading pabot."); 
+        
+        // if we force upgrade 
+        if(forced) {
+            // if the folder already exists ....
+            if(new File(System.getProperty("user.dir") + "/pabot").exists()) {
+                // begin to delete existing directory
+                try {
+                    FileUtils.deleteDirectory(new File(System.getProperty("user.dir") + "/pabot")); 
+                } catch(IOException ex) {
+                    String date = new Date().toString();
+                    Tools.writeLog(Arrays.asList(date, "Error deleting existing pabot : ", ex.getLocalizedMessage()));
+                } 
+            } 
+        } 
+         
+        // if the folder doesn't exists we have to clone pabot from github
+        if(!new File(System.getProperty("user.dir") + "/pabot").exists()) {
+            try {
+                Git git = Git.cloneRepository()
+                .setURI( CUSTOM_PABOT_REPO_URI )
+                .setDirectory(new File(System.getProperty("user.dir") + "/pabot"))
+                .call();
+                
+                // move pabot.py, pabotlib.py, __init__.py and result_merger.py to parent folder
+                Files.move(new File(System.getProperty("user.dir") + "/pabot/pabot/pabot.py").toPath(), 
+                        new File(System.getProperty("user.dir") + "/pabot/pabot.py").toPath(), 
+                        StandardCopyOption.REPLACE_EXISTING);
+ 
+                Files.move(new File(System.getProperty("user.dir") + "/pabot/pabot/pabotlib.py").toPath(), 
+                        new File(System.getProperty("user.dir") + "/pabot/pabotlib.py").toPath(), 
+                        StandardCopyOption.REPLACE_EXISTING);
+                
+                Files.move(new File(System.getProperty("user.dir") + "/pabot/pabot/result_merger.py").toPath(), 
+                        new File(System.getProperty("user.dir") + "/pabot/result_merger.py").toPath(), 
+                        StandardCopyOption.REPLACE_EXISTING);
+                
+                Files.move(new File(System.getProperty("user.dir") + "/pabot/pabot/__init__.py").toPath(), 
+                        new File(System.getProperty("user.dir") + "/pabot/__init__.py").toPath(), 
+                        StandardCopyOption.REPLACE_EXISTING);
+                
+            } catch(GitAPIException | IOException ex) {
+                String date = new Date().toString();
+                Tools.writeLog(Arrays.asList(date, "Error while cloning custom pabot : ", ex.getLocalizedMessage()));
+            }
+        }
+        
+        
+        
+        
+    }
 
     /**
      * Get list of valuesXYZ.dat files into CONF_PATH/devices_conf, in other
@@ -51,7 +119,7 @@ public class Tools {
      *
      * @return the list of theses files
      */
-    protected static ArrayList<Device> getDevicesDat() {
+    public static ArrayList<Device> getDevicesDat() {
         ArrayList<String> values_files = new ArrayList<>();
 
         File folder = new File(launcher.CONF_PATH);
@@ -83,7 +151,7 @@ public class Tools {
      * @param path to test files (to .robot files)
      * @return the list of xxxx.robot found in the path
      */
-    protected static ArrayList<String> getRobotFrameworkTestFiles(String path) {
+    public static ArrayList<String> getRobotFrameworkTestFiles(String path) {
         // prepate the return
         ArrayList<String> tests_files = new ArrayList<>();
 
@@ -106,7 +174,7 @@ public class Tools {
 
     // http://www.journaldev.com/842/how-to-get-file-extension-in-java
     // get the file extension
-    protected static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
         String fileName = file.getName();
         if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
             return fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -120,7 +188,7 @@ public class Tools {
      *
      * @param toAdd the text to append at the end of log file
      */
-    protected static void writeLog(List<String> toAdd) {
+    public static void writeLog(List<String> toAdd) {
 
         try {
             Path file = Paths.get(launcher.LOG_FILE_PATH);
@@ -143,7 +211,7 @@ public class Tools {
      * @param devices_conf
      * @param testSuiteName 
      */
-    protected static void preparingOutputsToTmp(ArrayList<Device> devices_conf, String testSuiteName) {
+    public static void preparingOutputsToTmp(ArrayList<Device> devices_conf, String testSuiteName) {
         
         // copying outputx.xml files to tmp directory (x = number of device) 
         int x = 0;
@@ -166,7 +234,7 @@ public class Tools {
      * @param testFileName 
      * @return the string name without the .robot extension
      */
-    protected static String getOnlyTestNameFromFile(String testFileName) {
+    public static String getOnlyTestNameFromFile(String testFileName) {
         return testFileName.substring(0, testFileName.lastIndexOf('.'));
     }
     
@@ -174,7 +242,7 @@ public class Tools {
     /**
      * Clear the workspace directory if it exists and then create needed folder
      */
-    protected static void getWorkingDir() {
+    public static void getWorkingDir() {
         
         
         // Set all working paths //

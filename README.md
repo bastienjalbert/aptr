@@ -2,9 +2,9 @@
  
 [![Version](https://img.shields.io/badge/version-0.1-brightgreen.svg)](https://pypi.python.org/pypi/robotframework-pabot)
 
-A parallel executor for [Robot Framework](http://www.robotframework.org) tests destinate to Android devices. With APTR you can run parallel tests on multiples devices and get report/log/screenshots correctly. 
+A parallel executor for [Robot Framework](http://www.robotframework.org) tests destinate to Android devices. With APTR you can run tests on multiples devices in parallel and get report/log/screenshots correctly. 
 
-![APTR Flow](TODO)
+![APTR Flow](https://i.imgur.com/oSFC74Z.jpg)
 
 When I firstly discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes sessions were override, or reports were not created correctly.
 APTR is a tool that I did to simplify at maximum the parallel execution of android tests. It used a custom pabot version to get screenshots correctly.
@@ -18,6 +18,14 @@ Or build you own jar from the project
 
     cd /path/to/git/clone
     mvn clean compile assembly:single
+
+## Dependencies:
+
+APTR need a custom pabot version to run correctly. So at startup APTR will looks for a folder called "pabot"
+which should contains pabot.py, pabotlib.py, ... "By chance" APTR do it automatically by cloning
+my custom pabot repository. 
+If the repo is already cloned, you can still force the upgrade by using --forceupdate argument.
+ 
 
 ## Configuration before running tests
 
@@ -38,6 +46,9 @@ WORKSPACE_DIR
     │   │   └── nexus.dat  
     │   └── output  
 
+Note : the output dir is cleaned automatically when you run another test suite.
+
+
 ### Android configuration files (.dat)
 
 All files into devices_conf directory are variable files passed to pabot. APTR uses --argumentfileX from pabot to run tests.  
@@ -53,7 +64,7 @@ device1.dat
 
 Theses 4 variables have to be defined in .dat files.
 
-If you need to pass arguments to pabot, you can specify them in the .dat file.  
+If you need to pass other arguments to pabot/pybot, you can specify them in the .dat file.  
 [Here you can see all possibilities.](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#argument-files)
 
 **Notice that all these variables are accessible from test suites (${udid}, ${appium}, ...)**
@@ -70,6 +81,9 @@ APTR has been created to simplify at maximum the parallelization.
   
 --testname (-t)
   Specify a general test name. It will be displayed into the final report/log
+
+--forceupdate (-force)
+  Force pabot update by deleting current directory, and cloning again from git. By default APTR uses a custom pabot version directly from a pabot directory, at same location of .jar.
   
 --jenkins (-j)
   If you want to run test on jenkins you should indicate it. The output is formated specially for jenkins or for local execution. Please refer to jenkins section for more information.
@@ -85,15 +99,19 @@ Example usages:
 *Run only one test*  
 
     user$ cd /path/to/robot/workspace/ 
-    user$ java -jar APTR-1.0.jar --file Test_Suite.robot
+    user$ java -jar APTR-0.1.jar --file Test_Suite.robot
 
 *Run all tests from a directory (workspace)*
 
-    user$ java -jar APTR-1.0.jar -d /path/to/robot/workspace
+    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace
+
+*Run all tests from a directory (workspace) and ensuring to have last custom pabot version*
+
+    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace --forceupdate
  
 ## Jenkins, and configuration
 
-// TODO
+![Basic jenkins configuration](https://i.imgur.com/TXoNSgH.png)
 
 ## Contributing to the project
 

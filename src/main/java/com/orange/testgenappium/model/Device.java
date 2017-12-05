@@ -1,8 +1,9 @@
 /*
  * Orange, All right reserved. 2017
  */
-package com.orange.testgenappium;
+package com.orange.testgenappium.model;
 
+import com.orange.testgenappium.utility.Tools;
 import java.io.File;
 import java.io.IOException; 
 import java.nio.charset.StandardCharsets;

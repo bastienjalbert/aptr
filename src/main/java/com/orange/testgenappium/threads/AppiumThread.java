@@ -18,8 +18,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.orange.testgenappium;
+package com.orange.testgenappium.threads;
 
+import com.orange.testgenappium.model.Device;
+import com.orange.testgenappium.utility.Tools;
+import com.orange.testgenappium.launcher;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;

@@ -18,15 +18,20 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.orange.testgenappium;
+package com.orange.testgenappium.threads;
  
-import static com.orange.testgenappium.Tools.getFileExtension;
+import com.orange.testgenappium.model.Device;
+import com.orange.testgenappium.utility.Tools;
+import com.orange.testgenappium.launcher;
+import static com.orange.testgenappium.utility.Tools.getFileExtension;
 import static com.orange.testgenappium.launcher.IMG_PATH;
 import static com.orange.testgenappium.launcher.OUTPUT_PATH; 
 import static com.orange.testgenappium.launcher.WORKING_PATH;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -197,6 +202,9 @@ public class RebotThread implements Runnable {
             p.destroyForcibly();
                 
             // if we executed tests locally (<=> means not on jenkins typically)
+            // so we need to get a final log.html/report.html and move screenshots 
+            // to this folder. Then we can display our beautiful report with our 
+            // crash screenshots
             if(!jenkins) {
                 // create the final output directory
                 final String FINAL_OUTPUT = OUTPUT_PATH + "/final";
@@ -231,9 +239,10 @@ public class RebotThread implements Runnable {
                 System.out.println("Report:  " + new File(FINAL_OUTPUT).getAbsolutePath() + "/report.html");
                 
             } else { // we just have to copy screenshots to working dir if we
-                     // ran test on jenkins
+                     // run test on jenkins
                 
-                // copy all screenshots to the final directory
+                // copy all screenshots to the tmp directory (jenkins robot output)
+                
                 // open the directory and get files into
                 File folder = new File(IMG_PATH);
                 File[] listOfFiles = folder.listFiles();
@@ -242,7 +251,7 @@ public class RebotThread implements Runnable {
                     // we verify that the file is an image (.png)
                     if (listOfFiles[i].isFile() 
                             && getFileExtension(listOfFiles[i]).equals("png")) { 
-                        // moving the image
+                        // moving the image, so jenkins can get these images after
                         listOfFiles[i].renameTo(new File(WORKING_PATH + "/" + listOfFiles[i].getName())); 
                     } 
                 }
@@ -250,8 +259,12 @@ public class RebotThread implements Runnable {
   
 
         } catch (Exception ex) {
-            String date = new Date().toString();
-            Tools.writeLog(Arrays.asList(date, "Error appium server start : ", ex.getMessage()));
+            String date = new Date().toString(); 
+            
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+            
+            Tools.writeLog(Arrays.asList(date, "Error rebot execution : ", errors.toString()));
         }
 
     }

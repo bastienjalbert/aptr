@@ -18,11 +18,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-package com.orange.testgenappium;
+package com.orange.testgenappium.threads;
 
+import com.orange.testgenappium.model.Device;
+import com.orange.testgenappium.utility.Tools;
+import com.orange.testgenappium.launcher;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -111,23 +116,29 @@ public class PabotThread implements Runnable {
                 System.out.println("       - " + oneDevice.getName());
             }
 
-            // show pabot output (stdout)
-            p.getOutputStream().flush();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            
-            // capture line from standard output from kal execution
-            String line = new String();
-            while ((line = reader.readLine()) != null) { 
-                System.out.println("PABOT OUTPUT : " + line); 
-                System.out.flush();
+            // if we want verbose output
+            if(launcher.VERBOSE) {
+                // show pabot output (stdout)
+                p.getOutputStream().flush();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                // capture line from standard output from kal execution
+                String line;
+                while ((line = reader.readLine()) != null) { 
+                    System.out.println("PABOT OUTPUT : " + line); 
+                    System.out.flush();
+                }
             }
-            
+             
             p.destroy();
             p.destroyForcibly();
 
         } catch (Exception ex) {
             String date = new Date().toString();
-            Tools.writeLog(Arrays.asList(date, "Error appium server start : ", ex.getMessage()));
+            StringWriter errors = new StringWriter();
+            ex.printStackTrace(new PrintWriter(errors));
+ 
+            Tools.writeLog(Arrays.asList(date, "Error on pabot execution : ", errors.toString()));
         }
 
     }

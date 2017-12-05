@@ -21,6 +21,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package com.orange.testgenappium;
 
+import com.orange.testgenappium.model.Device;
+import com.orange.testgenappium.utility.Tools;
+import com.orange.testgenappium.threads.RebotThread;
+import com.orange.testgenappium.threads.AppiumThread;
+import com.orange.testgenappium.threads.PabotThread;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date; 
@@ -43,28 +48,31 @@ public class launcher {
     //// Some var here are shared with other classes (like PabotThread) ///////
     
     // path to the robotframework workspace
-    protected static String PATH_TO_TESTS;
+    public static String PATH_TO_TESTS;
 
     // Workspace where test will run (contains devices_conf folder)
-    protected static String RUNNER_PATH;
+    public static String RUNNER_PATH;
     
     // Workspace where tests will run be temporally stored before reporting
-    protected static String WORKING_PATH;
+    public static String WORKING_PATH;
             
     // Contains all valuesXYZ.dat file (devices configuration)
-    protected static String CONF_PATH;
+    public static String CONF_PATH;
 
     // Results output directory 
-    protected static String OUTPUT_PATH;
+    public static String OUTPUT_PATH;
 
     // Log file path
-    protected static String LOG_FILE_PATH;
+    public static String LOG_FILE_PATH;
      
     // Directory path to appium screenshot for reports
-    protected static String IMG_PATH;
+    public static String IMG_PATH;
   
     // general test name
-    protected static String TESTS_NAME = "Default-Test";
+    public static String TESTS_NAME = "Default-Test";
+     
+    // indicator to verbose or not 
+    public static boolean VERBOSE = false;
 
     ///////////////////////////////////////////////////////////////////////////
     /**
@@ -73,12 +81,15 @@ public class launcher {
      * @param args see the list below
      */
     public static void main(String[] args) throws Exception {
-
+        
         // prepare to get arguments.
         final Options options = configParameters();
         final CommandLineParser parser = new DefaultParser();
         final CommandLine line = parser.parse(configParameters(), args);
-
+        
+        // get last version of custom pabot (forced or not)
+        Tools.updateCustomPabot(line.hasOption("forceupdate"));
+  
         // configuring future test by parameters
         // start all tests of a directory
         if (line.hasOption("directory")) {
@@ -94,6 +105,9 @@ public class launcher {
         if (line.hasOption("testname")) {
             TESTS_NAME = line.getOptionValue("testname");
         }
+        
+        // set if we want more verbose output or not
+        VERBOSE = line.hasOption("verbose");
 
         // Set all working paths and clear old test reports in workspace
         Tools.getWorkingDir();
@@ -109,12 +123,11 @@ public class launcher {
             System.exit(15);
         }
 
+        /** Prepare to start appium servers **/
+        
         // list of (future) appium server processes
         ArrayList<Thread> appium_threads = new ArrayList<>();
- 
-        // list of path to robot test files
-        ArrayList<String> tests_suites = new ArrayList<>();
-
+  
         // stop already running appium servers (if there are)
         AppiumThread.killallAppiumNode();
 
@@ -130,6 +143,9 @@ public class launcher {
 
         // ensuring all appium servers are ready before running any test ... 
         Thread.sleep(5000);
+        
+        // list of file path to robot test files
+        ArrayList<String> tests_suites = new ArrayList<>();
 
         // prepare files to begin tests (populate the list of test file name)
         if (line.hasOption("directory")) {
@@ -139,10 +155,10 @@ public class launcher {
         }
         
         /**
-         * start tests
+         * start test execution
          */
         try { 
-            // executing all test
+            // executing all tests 
             for (String oneTestFile : tests_suites) { 
                  
                 // start one test suite on all devices
@@ -220,6 +236,13 @@ public class launcher {
                 .hasArg(false)
                 .required(false)
                 .build();
+        
+        final Option forcepabotupdate = Option.builder("force")
+                .longOpt("forceupdate")
+                .desc("Force pabot update by deleting current directory, and cloning again from git.")
+                .hasArg(false)
+                .required(false)
+                .build();
 
         final Options options = new Options();
 
@@ -227,21 +250,23 @@ public class launcher {
         options.addOption(file);
         options.addOption(testname);
         options.addOption(jenkins);
-       options.addOption(verbose);
-
+        options.addOption(verbose);
+        options.addOption(forcepabotupdate);
+        
         return options;
     }
 
     public static void showUsage() {
-        System.out.println("------------------------------------------------");
+        System.out.println("-------------------------------------------------------");
         System.out.println("Robot framework Android automatic parallel test runner.");
         System.out.println("");
-        System.out.println("USAGE : java -jar [-d </path/robot/files/> or -f </path/to/one/robot/file.robot>] [-l <lang>]");
+        System.out.println("USAGE : java -jar [-d </path/robot/files/> or -f </path/to/one/robot/file.robot>] [args...]");
         System.out.println("-d,--directory             Select a folder that contains robot test files.");
         System.out.println("-f,--file                  Directory or file args, but not both, here just select one robot test file.");
-        System.out.println("-t,--testname              Choose the final test name.");
-        System.out.println("-j,--jenkins               Specify if you're running test with jenkins or locally.");
-        System.out.println("-v,--verbose               Show more output from processes (pabot, rebot, ...). More verbose.");
+        System.out.println("-t,--testname (opt)        Choose the final test name.");
+        System.out.println("-j,--jenkins (opt)         Specify if you're running test with jenkins or locally.");
+        System.out.println("-v,--verbose (opt)         Show more output from processes (pabot, rebot, ...). More verbose.");
+        System.out.println("-force,--forceupdate (opt) Force pabot update by deleting current directory, and cloning again from git.");
         System.out.println("------------------------------------------------");
 
     }
