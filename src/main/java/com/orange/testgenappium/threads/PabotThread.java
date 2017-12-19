@@ -128,6 +128,9 @@ public class PabotThread implements Runnable {
                     System.out.println("PABOT OUTPUT : " + line); 
                     System.out.flush();
                 }
+            } else {
+                // if we don't want verbose output we nevertheless need to wait for process to finish 
+                p.waitFor();
             }
              
             p.destroy();
