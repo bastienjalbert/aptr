@@ -105,7 +105,7 @@ Example usages:
 
     user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace
 
-*Run all tests from a directory (workspace) and ensuring to have last custom pabot version and add verbose output *
+*Run all tests from a directory (workspace) and ensuring to have last custom pabot version and add verbose output*
 
     user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace --forceupdate -v
  
