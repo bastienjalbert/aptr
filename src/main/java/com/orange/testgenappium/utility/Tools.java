@@ -189,6 +189,13 @@ public class Tools {
      * @param toAdd the text to append at the end of log file
      */
     public static void writeLog(List<String> toAdd) {
+        
+        if(launcher.VERBOSE) {
+            System.err.println("ERROR : ");
+            for(String errorPart : toAdd) {
+                System.err.println(errorPart + " ");
+            }
+        }
 
         try {
             Path file = Paths.get(launcher.LOG_FILE_PATH);
@@ -243,17 +250,15 @@ public class Tools {
      * Clear the workspace directory if it exists and then create needed folder
      */
     public static void getWorkingDir() {
-        
-        
+         
         // Set all working paths //
-        
-        LOG_FILE_PATH = RUNNER_PATH + "/error.log.txt"; 
-        
-        
+         
         RUNNER_PATH = PATH_TO_TESTS + "/runner";
         if(!(new File(RUNNER_PATH).exists())) {
             new File(RUNNER_PATH).mkdir();
         }  
+        
+        LOG_FILE_PATH = RUNNER_PATH + "/error.log.txt"; 
         
         // if the output directory exists just delete it (recursivelly) 
         // and create it again (empty) <=> clear workspace
