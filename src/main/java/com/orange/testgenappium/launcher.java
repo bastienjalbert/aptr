@@ -86,10 +86,7 @@ public class launcher {
         final Options options = configParameters();
         final CommandLineParser parser = new DefaultParser();
         final CommandLine line = parser.parse(configParameters(), args);
-        
-        // get last version of custom pabot (forced or not)
-        Tools.updateCustomPabot(line.hasOption("forceupdate"));
-  
+         
         // configuring future test by parameters
         // start all tests of a directory
         if (line.hasOption("directory")) {
@@ -111,6 +108,9 @@ public class launcher {
 
         // Set all working paths and clear old test reports in workspace
         Tools.getWorkingDir();
+        
+        // get last version of custom pabot (forced or not)
+        Tools.updateCustomPabot(line.hasOption("forceupdate"));
         
         // all configurations about devices
         ArrayList<Device> devices_conf = Tools.getDevicesDat();
@@ -158,6 +158,9 @@ public class launcher {
          * start test execution
          */
         try { 
+            // little indicator to know where we are in test execution
+            int indicator = 1;
+            
             // executing all tests 
             for (String oneTestFile : tests_suites) { 
                  
@@ -171,7 +174,13 @@ public class launcher {
                 // when the test is terminated
                 // copying and renamming each outputx.xml files 
                 Tools.preparingOutputsToTmp(devices_conf, Tools.getOnlyTestNameFromFile(oneTestFile));
-                 
+                
+                // show which test has been executed
+                System.out.println("================================================================");
+                System.out.println("Test : " + Tools.getOnlyTestNameFromFile(oneTestFile) + " passed");
+                System.out.println("Total : " + indicator + "/" + tests_suites.size() + " test(s) passed");
+                System.out.println("================================================================");
+                indicator++;
             } 
             
             /* Creating final output.xml and report/log html files by aggregating *
