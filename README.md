@@ -6,7 +6,7 @@ A parallel executor for [Robot Framework](http://www.robotframework.org) tests d
 
 ![APTR Flow](https://i.imgur.com/oSFC74Z.jpg)
 
-When I firstly discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes sessions were override, or reports were not created correctly.
+When I firstly discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes appium sessions were override, or reports were not created correctly.
 APTR is a tool that I did to simplify at maximum the parallel execution of android tests. It used a custom pabot version to get screenshots correctly.
 
 
@@ -24,7 +24,7 @@ Or build you own jar from the project
 APTR need a custom pabot version to run correctly. So at startup APTR will looks for a folder called "pabot"
 which should contains pabot.py, pabotlib.py, ... "By chance" APTR do it automatically by cloning
 my custom pabot repository. 
-If the repo is already cloned, you can still force the upgrade by using --forceupdate argument.
+If the repo is already cloned, you can still force cloning again (upgrade) by using --forceupdate argument.
  
 
 ## Configuration before running tests
@@ -77,19 +77,19 @@ APTR has been created to simplify at maximum the parallelization.
   Specify the workspace directory (which contains .robot files and runner directory)
 
 --file (-f)    
-  Specify only one test file to run, you need to be on workspace before running -f
+  Specify only one test file to run, you need to be on workspace before running -f   
   
---testname (-t)
-  Specify a general test name. It will be displayed into the final report/log
+--testname (-t)   
+  Specify a general test name. It will be displayed into the final report/log   
 
---forceupdate (-force)
-  Force pabot update by deleting current directory, and cloning again from git. By default APTR uses a custom pabot version directly from a pabot directory, at same location of .jar.
+--forceupdate (-force)   
+  Force pabot update by deleting current directory, and cloning again from git. By default APTR uses a custom pabot version directly from a pabot directory, at same location of .jar.   
   
---jenkins (-j)
-  If you want to run test on jenkins you should indicate it. The output is formated specially for jenkins or for local execution. Please refer to jenkins section for more information.
+--jenkins (-j)   
+  If you want to run test on jenkins you should indicate it. The output is formated specially for jenkins or for local execution. Please refer to jenkins section for more information.   
   
---verbose (-v)
-  Specify if you want to see processes output and add some verbose output.
+--verbose (-v)   
+  Specify if you want to see processes output and add some verbose output.   
 
 ## Running and examples:
 
@@ -105,11 +105,26 @@ Example usages:
 
     user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace
 
-*Run all tests from a directory (workspace) and ensuring to have last custom pabot version*
+*Run all tests from a directory (workspace) and ensuring to have last custom pabot version and add verbose output *
 
-    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace --forceupdate
+    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace --forceupdate -v
  
 ## Jenkins, and configuration
+
+Considering a workspace like this 
+
+    Android
+    ├── TestFileSuite1.robot  
+    ├── TestFileSuite2.robot  
+    ├── ....................  
+    ├── runner   
+    │   ├── devices_conf  
+    │   │   ├── device1.dat  
+    │   │   ├── .........     
+    │   │   └── nexus.dat  
+    │   └── output  
+
+You have to configure jenkins like this :  
 
 ![Basic jenkins configuration](https://i.imgur.com/TXoNSgH.png)
 
