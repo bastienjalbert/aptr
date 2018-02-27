@@ -6,8 +6,8 @@ A parallel executor for [Robot Framework](http://www.robotframework.org) tests d
 
 ![APTR Flow](https://i.imgur.com/oSFC74Z.jpg)
 
-When I firstly discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes appium sessions were override, or reports were not created correctly.
-APTR is a tool that I did to simplify at maximum the parallel execution of android tests. It used a custom pabot version to get screenshots correctly.
+When I discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes appium sessions were override, or reports were not created correctly.
+APTR is a tool that I did to simplify at maximum the parallel execution of android tests. It uses a custom pabot version to get screenshots in reports.
 
 
 ## Installation:
@@ -101,9 +101,9 @@ Example usages:
     user$ cd /path/to/robot/workspace/ 
     user$ java -jar APTR-0.1.jar --file Test_Suite.robot
 
-*Run all tests from a directory (workspace)*
+*Run all tests from a directory (workspace) and choose a test name*
 
-    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace
+    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace -t MyBigTest
 
 *Run all tests from a directory (workspace) and ensuring to have last custom pabot version and add verbose output*
 
