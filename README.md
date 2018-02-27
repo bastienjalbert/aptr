@@ -14,6 +14,8 @@ APTR is a tool that I did to simplify at maximum the parallel execution of andro
 
 You can get the compiled jar from release : 
 
+[Download JAR](https://github.com/bastienjalbert/aptr/releases/tag/v0.1)
+    
 Or build you own jar from the project
 
     cd /path/to/git/clone
