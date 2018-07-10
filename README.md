@@ -21,6 +21,8 @@ Or build you own jar from the project
     cd /path/to/git/clone
     mvn clean compile assembly:single
 
+Then you can find the .jar into the target directory.
+
 ## Dependencies:
 
 APTR need a custom pabot version to run correctly. So at startup APTR will looks for a folder called "pabot"
@@ -79,7 +81,7 @@ APTR has been created to simplify at maximum the parallelization.
   Specify the workspace directory (which contains .robot files and runner directory)
 
 --file (-f)    
-  Specify only one test file to run, you need to be on workspace before running -f   
+  Specify one or multiple files, you need to be on workspace before running -f    (use cd)
   
 --testname (-t)   
   Specify a general test name. It will be displayed into the final report/log   
@@ -100,7 +102,7 @@ Example usages:
 
 *Run only one test*  
 
-    user$ cd /path/to/robot/workspace/ 
+    user$ cd /path/to/robot/workspace/ # please go to your robot workspace before using -f arg
     user$ java -jar APTR-0.1.jar --file Test_Suite.robot
 
 *Run all tests from a directory (workspace) and choose a test name*
@@ -134,5 +136,5 @@ You have to configure jenkins like this :
 
 There are several ways you can help in improving this tool:
 
-   - Report an issue or an improvement idea to the [issue tracker](https://github.com/bastienjalbert/aptr/issues) 
-   - Giving me a tip (bitcoin cash : 14b2UMY1kCnhPDRbegTEg3zATQapCoswkf)
+   - Report an issue or an improvement idea to the [issue tracker](https://github.com/bastienjalbert/aptr/issues)  
+   - Contribute by submitting improvements.

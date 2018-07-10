@@ -30,7 +30,8 @@ import java.util.Map;
 
 /**
  * Create an appium server as a thread with device configuration. You can kill
- * node processes too, to kill appium servers that might still running.
+ * node processes to kill appium servers that might still running.  
+ * TODO : kill appium servers better ...
  * @author bastienjalbert
  */
 public class AppiumThread implements Runnable {

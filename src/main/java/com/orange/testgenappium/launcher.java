@@ -40,7 +40,7 @@ import org.apache.commons.cli.Options;
  * Main class of the launcher. Make a workspace, start // tests, copy right files 
  * and then make a report of all of this.
  * @author bastienjalbert
- * @version 0.1
+ * @version 0.1.1
  */
 public class launcher {
 
@@ -150,9 +150,10 @@ public class launcher {
         // prepare files to begin tests (populate the list of test file name)
         if (line.hasOption("directory")) {
             tests_suites = Tools.getRobotFrameworkTestFiles(PATH_TO_TESTS);
-        } else { // just a file
-            tests_suites.add(line.getOptionValue("file"));
+        } else { // just one file (or many ...)
+            tests_suites.addAll(Arrays.asList(line.getOptionValues("file")));
         }
+         
         
         /**
          * start test execution
@@ -222,8 +223,10 @@ public class launcher {
                 .desc("Path to one .robot file")
                 .hasArg(true)
                 .argName("file")
-                .required(false)
+                .required(false) 
                 .build();
+        // set unlimited values for this argument
+        file.setArgs(Option.UNLIMITED_VALUES);
 
         final Option testname = Option.builder("t")
                 .longOpt("testname")
@@ -271,7 +274,7 @@ public class launcher {
         System.out.println("");
         System.out.println("USAGE : java -jar [-d </path/robot/files/> or -f </path/to/one/robot/file.robot>] [args...]");
         System.out.println("-d,--directory             Select a folder that contains robot test files.");
-        System.out.println("-f,--file                  Directory or file args, but not both, here just select one robot test file.");
+        System.out.println("-f,--file                  Specify one or multiple files. (current directory -> robot workspace)");
         System.out.println("-t,--testname (opt)        Choose the final test name.");
         System.out.println("-j,--jenkins (opt)         Specify if you're running test with jenkins or locally.");
         System.out.println("-v,--verbose (opt)         Show more output from processes (pabot, rebot, ...). More verbose.");

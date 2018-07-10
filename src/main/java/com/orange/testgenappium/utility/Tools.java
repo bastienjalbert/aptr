@@ -146,7 +146,8 @@ public class Tools {
     }
 
     /**
-     * Get a list of test file (.robot) from a directory
+     * Get a list of test file (.robot) from a directory.
+     * Sorted lexicographically (file name)
      *
      * @param path to test files (to .robot files)
      * @return the list of xxxx.robot found in the path
@@ -157,7 +158,7 @@ public class Tools {
 
         // open the directory and get files into
         File folder = new File(path);
-        File[] listOfFiles = folder.listFiles();
+        File[] listOfFiles = folder.listFiles(); 
 
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
@@ -169,6 +170,19 @@ public class Tools {
             }
         }
 
+        // sort by file name
+        tests_files.sort((String obj1,String obj2) -> {
+            if (obj1 == obj2) {
+                return 0;
+            }
+            if (obj1 == null) {
+                return -1;
+            }
+            if (obj2 == null) {
+                return 1;
+            }
+            return obj1.compareTo(obj2);
+        });
         return tests_files;
     }
 
