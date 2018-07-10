@@ -1,6 +1,6 @@
 # Android Parallel Tests Runner (APTR)
  
-[![Version](https://img.shields.io/badge/version-0.1-brightgreen.svg)](https://pypi.python.org/pypi/robotframework-pabot)
+[![Version](https://img.shields.io/badge/version-0.1.1-brightgreen.svg)](https://pypi.python.org/pypi/robotframework-pabot)
 
 A parallel executor for [Robot Framework](http://www.robotframework.org) tests destined to Android devices. With APTR you can run tests on multiple devices in parallel and get report/log/screenshots correctly. 
 
