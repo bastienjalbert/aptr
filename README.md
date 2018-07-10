@@ -15,7 +15,7 @@ APTR is a tool that I did to simplify at maximum the parallel execution of andro
 
 You can get the compiled jar from release : 
 
-[Download JAR](https://github.com/bastienjalbert/aptr/releases/tag/v0.1)
+[Download latest JAR](https://github.com/bastienjalbert/aptr/releases/tag/v0.1.1)
     
 Or build you own jar from the project
 
@@ -98,21 +98,26 @@ APTR has been created to simplify at maximum the parallelization.
 
 ## Running and examples:
 
-Once you have 
-Example usages:
+Once you download the jar (or compile yourself it),   
+Example usages (consider change "-x" with your version, so APTR-0.1.1.jar for exemple):
 
 *Run only one test*  
 
     user$ cd /path/to/robot/workspace/ # please go to your robot workspace before using -f arg
-    user$ java -jar APTR-0.1.jar --file Test_Suite.robot
+    user$ java -jar APTR-x.jar --file Test_Suite.robot
+    
+*Run multiple test files*  
+
+    user$ cd /path/to/robot/workspace/ # please go to your robot workspace before using -f arg
+    user$ java -jar APTR-x.jar -f Test_Suite.robot Test_Suite_Forever.robot JCV.robot
 
 *Run all tests from a directory (workspace) and choose a test name*
 
-    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace -t MyBigTest
+    user$ java -jar APTR-x.jar -d /path/to/robot/workspace -t MyBigTest
 
 *Run all tests from a directory (workspace) and ensuring to have last custom pabot version and add verbose output*
 
-    user$ java -jar APTR-0.1.jar -d /path/to/robot/workspace --forceupdate -v
+    user$ java -jar APTR-x.jar -d /path/to/robot/workspace --forceupdate -v
  
 ## Jenkins, and configuration
 
