@@ -10,6 +10,11 @@ A parallel executor for [Robot Framework](http://www.robotframework.org) tests d
 When I discovered Pabot I was very excited. But there were problems when I tried to run my android device tests simultaneously. Sometimes appium sessions were override, or reports were not created correctly.
 APTR is a tool that I did to simplify at maximum the parallel execution of android tests. It uses a custom pabot version to get screenshots in reports.
 
+## Demo
+
+Click to watch.
+[![Watch the video](https://cdn-b-east.streamable.com/image/4e8ye.jpg?token=_8kATQalsWfQa3wg-HMPqw&expires=1568629200)](https://streamable.com/4e8ye)
+
 
 ## Installation:
 
